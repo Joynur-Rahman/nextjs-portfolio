@@ -53,7 +53,7 @@ const NavPart3 = () => {
         <ThemeToggleButton
           variant="circle-blur"
           start="top-right"
-          className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-8 lg:h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12"
+          // className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-8 lg:h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12"
         />
       </div>
     </div>

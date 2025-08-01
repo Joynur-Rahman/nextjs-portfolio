@@ -51,7 +51,7 @@ const Page = () => {
     const form = event.currentTarget
     const formData = new FormData(form)
 
-    formData.append("access_key", "6e2c76ed-6ffb-4b04-9c67-b4c5849604ab")
+    formData.append('access_key', process.env.NEXT_PUBLIC_WEB3FORM_KEY as string)
 
     const object = Object.fromEntries(formData)
     const json = JSON.stringify(object)
