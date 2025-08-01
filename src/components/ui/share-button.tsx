@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 interface ShareLink {
-  icon: LucideIcon
+  icon: React.ComponentType<{ className?: string }>
   href?: string
   onClick?: () => void
   label?: string
-  className?: string
+  className: string
 }
 
 interface ShareButtonProps
