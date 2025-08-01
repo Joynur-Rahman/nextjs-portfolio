@@ -6,7 +6,36 @@ import { FaGithub } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
-import ThemeToggleButton from "../ui/theme-toggle-button"
+import { IconType } from 'react-icons';
+interface SocialLink {
+  icon: IconType
+  onClick: () => void
+}
+
+const socialLinks: SocialLink[] = [
+  {
+    icon: FaGithub,
+    onClick: () => window.open('https://github.com/Joynur-Rahman', '_blank', 'noopener,noreferrer'),
+  },
+  {
+    icon: FaLinkedinIn,
+    onClick: () =>
+      window.open(
+        'https://www.linkedin.com/in/joynur-rahman-65274a284?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
+        '_blank',
+        'noopener,noreferrer'
+      ),
+  },
+  {
+    icon: FaInstagram,
+    onClick: () =>
+      window.open('https://www.instagram.com/joynursrahman?igsh=a3k2d2JnbGhsZWti', '_blank', 'noopener,noreferrer'),
+  },
+  {
+    icon: RiTwitterXLine,
+    onClick: () => window.open('https://x.com/rtridevjay?s=08', '_blank', 'noopener,noreferrer'),
+  },
+]
 const Page = () => {
   const [result, setResult] = useState<string>("")
 
@@ -61,32 +90,9 @@ const Page = () => {
           </div>
           {/* Social Media Links */}
           <div className='mt-8 pl-2 ml-2 '>
-            <ShareButton
-            links={[
-              {
-                icon: FaGithub,
-                onClick: () => window.open("https://github.com/Joynur-Rahman")
-              },
-              {
-                icon: FaLinkedinIn,
-                onClick: () =>
-                  window.open(
-                    "https://www.linkedin.com/in/joynur-rahman-65274a284?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-                  )
-              },
-              {
-                icon: FaInstagram,
-                onClick: () =>
-                  window.open("https://www.instagram.com/joynursrahman?igsh=a3k2d2JnbGhsZWti")
-              },
-              {
-                icon: RiTwitterXLine,
-                onClick: () => window.open("https://x.com/rtridevjay?s=08")
-              }
-            ]}
-          >
-            Connect
-          </ShareButton>
+            <ShareButton links={socialLinks} className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-base">
+          Connect
+        </ShareButton>
           </div>
         </div>
         <form

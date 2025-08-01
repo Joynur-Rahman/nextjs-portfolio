@@ -11,6 +11,7 @@ interface ShareLink {
   href?: string
   onClick?: () => void
   label?: string
+  className?: string
 }
 
 interface ShareButtonProps
