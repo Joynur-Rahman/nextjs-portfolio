@@ -169,7 +169,7 @@ const About = () => {
               xl:mb-5
               2xl:mb-6
             '>
-              I'm a front-end developer passionate about building modern, interactive web experiences. I specialize in React.js and Next.js, 
+              I&apos;m a front-end developer passionate about building modern, interactive web experiences. I specialize in React.js and Next.js, 
               and I love using animation libraries like GSAP to create smooth, engaging UI effects.
             </p>
 
@@ -227,7 +227,7 @@ const About = () => {
               2xl:mb-6
             '>
               I also explore the intersection of software and hardware through IoT projects, 
-              and I'm comfortable working across multiple programming languages including HTML, 
+              and I&apos;m comfortable working across multiple programming languages including HTML, 
               CSS, JavaScript, Java, C, C++, and Python.
             </p>
 
