@@ -1,8 +1,7 @@
 "use client"
 
 import { FC, useEffect, useRef } from "react"
-import { HTMLMotionProps, motion, useAnimation, useInView } from "framer-motion"
-
+import { HTMLMotionProps, motion, useAnimation, useInView, Variants } from "framer-motion"
 
 type AnimationType =
   | "fadeIn"
@@ -21,7 +20,14 @@ interface Props extends HTMLMotionProps<"div"> {
   duration?: number
 }
 
-const animationVariants = {
+// Explicitly typed variants to satisfy Framer Motion and TypeScript
+const animationVariants: Record<
+  AnimationType,
+  {
+    container: Variants | ((i?: number) => Variants)
+    child: Variants
+  }
+> = {
   fadeIn: {
     container: {
       hidden: { opacity: 0 },
@@ -33,16 +39,19 @@ const animationVariants = {
     child: {
       visible: {
         opacity: 1,
-        y: [0, -10, 0],
+        y: [0, -10, 0], // keyframe array for y
         transition: {
-          type: "spring",
-          damping: 12,
+          type: "keyframes", // <-- must be keyframes here
+          duration: 0.6,
+          times: [0, 0.5, 1],
+          damping: 12, // spring params ignored for keyframes but safe to keep
           stiffness: 100,
         },
       },
       hidden: { opacity: 0, y: 10 },
     },
   },
+
   fadeInUp: {
     container: {
       hidden: { opacity: 0 },
@@ -56,6 +65,7 @@ const animationVariants = {
       hidden: { opacity: 0, y: 20 },
     },
   },
+
   popIn: {
     container: {
       hidden: { scale: 0 },
@@ -73,6 +83,7 @@ const animationVariants = {
       hidden: { opacity: 0, scale: 0 },
     },
   },
+
   calmInUp: {
     container: {
       hidden: {},
@@ -88,16 +99,13 @@ const animationVariants = {
       visible: {
         y: 0,
         transition: {
-          ease: [0.125, 0.92, 0.69, 0.975], //  Drawing attention to dynamic content or interactive elements, where the animation needs to be engaging but not abrupt
+          ease: [0.125, 0.92, 0.69, 0.975],
           duration: 0.75,
-          //   ease: [0.455, 0.03, 0.515, 0.955], // smooth and gradual acceleration followed by a steady deceleration towards the end of the animation
-          //   ease: [0.115, 0.955, 0.655, 0.939], // smooth and gradual acceleration followed by a steady deceleration towards the end of the animation
-          //   ease: [0.09, 0.88, 0.68, 0.98], // Very Gentle Onset, Swift Mid-Section, Soft Landing
-          //   ease: [0.11, 0.97, 0.64, 0.945], // Minimal Start, Energetic Acceleration, Smooth Closure
         },
       },
     },
   },
+
   shiftInUp: {
     container: {
       hidden: {},
@@ -107,17 +115,17 @@ const animationVariants = {
     },
     child: {
       hidden: {
-        y: "100%", // Starting from below but not too far to ensure a dramatic but manageable shift.
+        y: "100%",
         transition: {
-          ease: [0.75, 0, 0.25, 1], // Starting quickly
-          duration: 0.6, // Shortened duration for a more dramatic start
+          ease: [0.75, 0, 0.25, 1],
+          duration: 0.6,
         },
       },
       visible: {
         y: 0,
         transition: {
-          duration: 0.8, // Slightly longer to accommodate the slow middle and swift end
-          ease: [0.22, 1, 0.36, 1], // This easing function starts quickly (dramatic shift), slows down (slow middle), and ends quickly (clean swift end)
+          duration: 0.8,
+          ease: [0.22, 1, 0.36, 1],
         },
       },
     },
@@ -144,6 +152,7 @@ const animationVariants = {
       },
     },
   },
+
   rollIn: {
     container: {
       hidden: {},
@@ -159,14 +168,12 @@ const animationVariants = {
         y: `0em`,
         transition: {
           duration: 0.9,
-          ease: [0.65, 0, 0.75, 0.65], // Great! Swift Beginning, Prolonged Ease, Quick Finish
-          //   ease: [0.75, 0.05, 0.85, 1], // Quick Start, Smooth Middle, Sharp End
-          //   ease: [0.7, -0.25, 0.9, 1.25], // Fast Acceleration, Gentle Slowdown, Sudden Snap
-          //   ease: [0.7, -0.5, 0.85, 1.5], // Quick Leap, Soft Glide, Snappy Closure
+          ease: [0.65, 0, 0.75, 0.65],
         },
       },
     },
   },
+
   whipIn: {
     container: {
       hidden: {},
@@ -182,10 +189,7 @@ const animationVariants = {
         y: `0em`,
         transition: {
           duration: 0.45,
-            ease: [0.75, 0.05, 0.85, 1], // Quick Start, Smooth Middle, Sharp End
-          //   ease: [0.7, -0.25, 0.9, 1.25], // Fast Acceleration, Gentle Slowdown, Sudden Snap
-          //   ease: [0.65, 0, 0.75, 1], // Great! Swift Beginning, Prolonged Ease, Quick Finish
-          // ease: [0.85, 0.1, 0.9, 1.2], // Rapid Initiation, Subtle Slow, Sharp Conclusion
+          ease: [0.75, 0.05, 0.85, 1],
         },
       },
     },
@@ -198,11 +202,17 @@ const TextAnimate: FC<Props> = ({
   ...props
 }: Props) => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: false }) // Animate on every viewport entry
+  const isInView = useInView(ref, { once: false }) // Animate on every entry
 
   const ctrls = useAnimation()
   const letters = Array.from(text)
-  const { container, child } = animationVariants[type]
+
+  // Retrieve container and child, handling functional container variants with default param
+  const containerVariant =
+    typeof animationVariants[type].container === "function"
+      ? animationVariants[type].container(1)
+      : animationVariants[type].container
+  const childVariant = animationVariants[type].child
 
   useEffect(() => {
     if (isInView) {
@@ -212,56 +222,56 @@ const TextAnimate: FC<Props> = ({
     }
   }, [ctrls, isInView])
 
+  // Special handling for rollIn and whipIn which animate word-by-word
   if (type === "rollIn" || type === "whipIn") {
     return (
       <h2
         ref={ref}
         className="mt-10 font-black text-black dark:text-neutral-100 py-5 pb-8 px-8 "
       >
-        {text.split(" ").map((word, index) => {
-          return (
-            <motion.span
-              key={index}
-              className="inline-block mr-[0.25em] whitespace-nowrap"
-              aria-hidden="true"
-              initial="hidden"
-              animate={ctrls}
-              variants={container}
-              transition={{
-                delayChildren: index * 0.3, // smaller delay to keep animation responsive
-                staggerChildren: 0.025,
-              }}
-            >
-              {word.split("").map((character, charIndex) => (
-                <motion.span
-                  key={charIndex}
-                  aria-hidden="true"
-                  variants={child}
-                  className="inline-block -mr-[0.01em]"
-                >
-                  {character}
-                </motion.span>
-              ))}
-            </motion.span>
-          )
-        })}
+        {text.split(" ").map((word, index) => (
+          <motion.span
+            key={index}
+            className="inline-block mr-[0.25em] whitespace-nowrap"
+            aria-hidden="true"
+            initial="hidden"
+            animate={ctrls}
+            variants={containerVariant}
+            transition={{
+              delayChildren: index * 0.3,
+              staggerChildren: 0.025,
+            }}
+          >
+            {word.split("").map((character, charIndex) => (
+              <motion.span
+                key={charIndex}
+                aria-hidden="true"
+                variants={childVariant}
+                className="inline-block -mr-[0.01em]"
+              >
+                {character}
+              </motion.span>
+            ))}
+          </motion.span>
+        ))}
       </h2>
     )
   }
 
+  // Default animation: animate all letters individually
   return (
     <motion.h2
       ref={ref}
       style={{ display: "flex", overflow: "hidden" }}
       role="heading"
-      variants={container}
+      variants={containerVariant}
       initial="hidden"
       animate={ctrls}
       className="mt-10 text-4xl font-black text-black dark:text-neutral-100 py-5 pb-8 px-8 md:text-5xl"
       {...props}
     >
       {letters.map((letter, index) => (
-        <motion.span key={index} variants={child}>
+        <motion.span key={index} variants={childVariant}>
           {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
