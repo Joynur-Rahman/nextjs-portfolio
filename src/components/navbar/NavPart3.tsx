@@ -10,6 +10,7 @@ import type { IconType } from 'react-icons'
 interface SocialLink {
   icon: IconType
   onClick: () => void
+  className?: string
 }
 
 const socialLinks: SocialLink[] = [
@@ -41,7 +42,10 @@ const NavPart3 = () => {
   return (
     <div className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-2 xl:gap-3 2xl:gap-4">
       <div className="scale-90 sm:scale-95 md:scale-100 lg:scale-90 xl:scale-100">
-        <ShareButton links={socialLinks} className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-base">
+        <ShareButton links={socialLinks.map(link => ({ 
+    ...link, 
+    className: link.className || '' 
+  }))} className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-base">
           Connect
         </ShareButton>
       </div>

@@ -2,20 +2,21 @@
 import React, { useState } from 'react'
 import { TextAnimate } from "@/components/ui/text-animate"
 import ShareButton from '@/components/ui/share-button'
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedinIn } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
+import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
 import { IconType } from 'react-icons';
+
 interface SocialLink {
   icon: IconType
   onClick: () => void
+  className?: string  // Added className property
 }
 
 const socialLinks: SocialLink[] = [
   {
     icon: FaGithub,
     onClick: () => window.open('https://github.com/Joynur-Rahman', '_blank', 'noopener,noreferrer'),
+    className: ''
   },
   {
     icon: FaLinkedinIn,
@@ -25,17 +26,21 @@ const socialLinks: SocialLink[] = [
         '_blank',
         'noopener,noreferrer'
       ),
+    className: ''
   },
   {
     icon: FaInstagram,
     onClick: () =>
       window.open('https://www.instagram.com/joynursrahman?igsh=a3k2d2JnbGhsZWti', '_blank', 'noopener,noreferrer'),
+    className: ''
   },
   {
     icon: RiTwitterXLine,
     onClick: () => window.open('https://x.com/rtridevjay?s=08', '_blank', 'noopener,noreferrer'),
+    className: ''
   },
 ]
+
 const Page = () => {
   const [result, setResult] = useState<string>("")
 
@@ -82,7 +87,7 @@ const Page = () => {
         <TextAnimate text="CONTACT ME" type="popIn" />
       </div>
 
-      <div className="flex flex-wrap items-start items-start gap-20 py-16 px-4">
+      <div className="flex flex-wrap items-start gap-20 py-16 px-4">
         <div>
           <div className="max-w-md flex-shrink-0 mt-6">
             <TextAnimate text="Feel free to reach out!" type="rollIn" />
@@ -90,7 +95,10 @@ const Page = () => {
           </div>
           {/* Social Media Links */}
           <div className='mt-8 pl-2 ml-2 '>
-            <ShareButton links={socialLinks} className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-base">
+            <ShareButton links={socialLinks.map(link => ({ 
+    ...link, 
+    className: link.className || '' 
+  }))} className="text-xs sm:text-sm md:text-base lg:text-sm xl:text-base">
           Connect
         </ShareButton>
           </div>
