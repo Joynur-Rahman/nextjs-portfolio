@@ -7,7 +7,7 @@ import { FaLinkedinIn } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
 import ThemeToggleButton from "../ui/theme-toggle-button"
-const page = () => {
+const Page = () => {
   const [result, setResult] = useState<string>("")
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -139,4 +139,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

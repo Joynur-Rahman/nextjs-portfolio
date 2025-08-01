@@ -5,7 +5,7 @@ import About from '@/components/about/About'
 import Projects from '@/components/projects/page'
 import  Contact from '@/components/contact/page'
 import Footer from '@/components/footer/footer'
-const page = () => {
+const Page = () => {
   return (
     <div>
       <Navbar />
@@ -18,4 +18,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
